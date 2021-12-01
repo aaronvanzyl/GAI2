@@ -45,12 +45,21 @@ public class Test : MonoBehaviour
         world.AddEntity(fishingSpot);
 
         OwnItemCondition ownItemCond = new OwnItemCondition(actor.ID, fishID, new Expression(3));
+
+
         PlanGenerator.GenerateTree(world, actor.ID, ownItemCond, 5, 3);
         List<PathNode> solutionTrees = PlanGenerator.Paths(ownItemCond);
+        PathNode testPath = solutionTrees[1];
+        List<Inequality> inequalities = PlanGenerator.GenerateInequalities(world, testPath);
+
         print($"found {solutionTrees.Count} solutions");
+        foreach(Inequality ineq in inequalities)
+        {
+            print(ineq);
+        }
 
         //treeRenderer.RenderTree(ownItemCond);
-        treeRenderer.RenderTree(solutionTrees[1 ]);
+        treeRenderer.RenderTree(solutionTrees[1]);
     }
 
 }

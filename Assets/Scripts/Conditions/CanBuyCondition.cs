@@ -25,9 +25,9 @@ public class CanBuyCondition : Condition
         return world.GetReadOnlyEntity(merchantID).QueryBuyPrice(world, itemID, buyerID, out _);
     }
 
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        Dictionary<string, string> displayValues = base.GetDisplayValues();
+        KVList<string, string> displayValues = base.GetDisplayValues();
         displayValues.Add("Merchant ID", merchantID.ToString());
         displayValues.Add("Buyer ID", buyerID.ToString());
         displayValues.Add("Item ID", itemID.ToString());

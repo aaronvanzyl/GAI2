@@ -40,9 +40,9 @@ public class OwnItemCondition : Condition
         return owner.GetItemCount(itemID).constant >= amount.Evaluate(variables);
     }
 
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        Dictionary<string, string> displayValues = base.GetDisplayValues();
+        KVList<string, string> displayValues = base.GetDisplayValues();
         displayValues.Add("Owner ID", ownerID.ToString());
         displayValues.Add("Item ID", itemID.ToString());
         displayValues.Add("Amount", amount.ToString());

@@ -32,9 +32,9 @@ public abstract class SimpleItemAction : Action
         return new List<Condition>() { posCond };
     }
 
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        Dictionary<string, string> displayValues = base.GetDisplayValues();
+        KVList<string, string> displayValues = base.GetDisplayValues();
         displayValues.Add("Giver ID", giverID.ToString());
         displayValues.Add("Item ID", itemID.ToString());
         displayValues.Add("Amount", amount.ToString());

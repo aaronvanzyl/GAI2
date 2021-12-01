@@ -16,9 +16,9 @@ public abstract class Condition: Node
         return actions;
     }
 
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        Dictionary<string, string> displayValues = new Dictionary<string, string>();
+        KVList<string, string> displayValues = new KVList<string, string>();
         return displayValues;
     }
 

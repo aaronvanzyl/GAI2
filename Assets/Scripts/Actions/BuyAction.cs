@@ -60,9 +60,9 @@ public class BuyAction : Action
         return new BuyAction(actorID, merchantID, itemID);
     }
 
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        Dictionary<string, string> displayValues = base.GetDisplayValues();
+        KVList<string, string> displayValues = base.GetDisplayValues();
         displayValues.Add("Merchant ID", merchantID.ToString());
         displayValues.Add("Item ID", itemID.ToString());
         displayValues.Add("Amount", amount.ToString());

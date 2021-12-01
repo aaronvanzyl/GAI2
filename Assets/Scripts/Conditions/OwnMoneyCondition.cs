@@ -44,9 +44,9 @@ public class OwnMoneyCondition : Condition
         return owner.readOnlyMoney.constant >= amount.Evaluate(variables);
     }
 
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        Dictionary<string, string> displayValues = base.GetDisplayValues();
+        KVList<string, string> displayValues = base.GetDisplayValues();
         displayValues.Add("Owner ID", ownerID.ToString());
         displayValues.Add("Amount", amount.ToString());
         return displayValues;

@@ -78,7 +78,57 @@ public static class PlanGenerator
         return actionPaths;
     }
 
-    
+    public static List<Node> DFS(Node root)
+    {
+        List<Node> visitOrder = new List<Node>();
+        Stack<Node> visitNext = new Stack<Node>();
+        visitNext.Push(root);
+        while (visitNext.Count() > 0)
+        {
+            Node node = visitNext.Pop();
+            visitOrder.Add(node);
+            foreach (Node child in node.GetChildren())
+            {
+                visitNext.Push(child);
+            }
+        }
+        visitOrder.Reverse();
+        return visitOrder;
+    }
+
+    public static List<Inequality> GenerateInequalities(IReadOnlyWorld underlying, PathNode root)
+    {
+        World simulated = new World(underlying);
+        List<Node> dfs = DFS(root);
+
+        List<Inequality> inequalities = new List<Inequality>();
+        foreach (Node node in dfs)
+        {
+            PathNode pathNode = (PathNode)node;
+            Node linked = pathNode.linked;
+            Debug.Log(linked.ToString());
+            if (linked is Condition linkedCond)
+            {
+                List<Inequality> nodeIneqs = linkedCond.GenerateInequalities(simulated);
+                foreach (Inequality ineq in nodeIneqs)
+                {
+                    Debug.Log(ineq);
+                }
+                inequalities.AddRange(nodeIneqs);
+                if (nodeIneqs.Count > 0)
+                {
+                    pathNode.displayValues.Add("Inequalities", string.Join(", ", nodeIneqs.Select(x => x.ToString())));
+                }
+            }
+            else if (linked is Action linkedAction)
+            {
+                linkedAction.Execute(simulated);
+            }
+        }
+        return inequalities;
+    }
+
+
 
     /// <summary>
     /// Generates every path of actions that will satisfy the given condition (with already built tree).

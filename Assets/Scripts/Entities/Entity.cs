@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class Entity : IReadOnlyEntity
 {
-    public bool canBuyFrom { get; set; }
-    public string name { get; set; }
-    public bool canSellTo { get; set; }
     public int ID { get; set; }
+    public string name { get; set; }
     public Vector2Int pos { get; set; }
     public Expression money { get; set; }
     public IReadOnlyExpression readOnlyMoney => money;
 
     protected Dictionary<int, Expression> inventory = new Dictionary<int, Expression>();
+    public bool canBuyFrom { get; set; }
+    public bool canSellTo { get; set; }
 
     public bool QuerySellPrice(IReadOnlyWorld world, int itemID, int sellerID, out int price)
     {
         if (!canSellTo)
         {
+            Debug.LogWarning($"Queried invalid sell price!!! {ID} selling to {sellerID}");
             price = 0;
             return false;
         }
@@ -63,6 +64,7 @@ public class Entity : IReadOnlyEntity
     public void CopyFrom(IReadOnlyEntity other)
     {
         ID = other.ID;
+        name = other.name;
         pos = other.pos;
         money = new Expression(other.readOnlyMoney);
         inventory = new Dictionary<int, Expression>();
@@ -70,6 +72,8 @@ public class Entity : IReadOnlyEntity
         {
             inventory[itemID] = new Expression(other.GetItemCount(itemID));
         }
+        canBuyFrom = other.canBuyFrom;
+        canSellTo = other.canSellTo;
     }
 
     public virtual Entity Clone() {

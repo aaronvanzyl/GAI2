@@ -17,12 +17,14 @@ public class World : IReadOnlyWorld
     {
         underlying = null;
         maxEntityID = -1;
+        maxItemID = -1;
     }
 
     public World(IReadOnlyWorld underlying)
     {
         this.underlying = underlying;
         maxEntityID = underlying.maxEntityID;
+        maxItemID = underlying.maxItemID;
     }
 
     public void AddEntity(Entity entity)
@@ -103,7 +105,7 @@ public class World : IReadOnlyWorld
         return maxItemID;
     }
 
-    public List<int> ItemsWithTag(ItemTag tag)
+    public IReadOnlyList<int> ItemsWithTag(ItemTag tag)
     {
         if (itemsWithTagDict.TryGetValue(tag, out List<int> items))
         {
@@ -114,7 +116,11 @@ public class World : IReadOnlyWorld
 
     public IReadOnlyItem GetItem(int itemID)
     {
-        return itemDict[itemID];
+        if (itemDict.TryGetValue(itemID, out IReadOnlyItem item))
+        {
+            return item;
+        }
+        return underlying.GetItem(itemID);
     }
 
 }

@@ -13,7 +13,7 @@ public abstract class Node
         return GetType().ToString();
     }
 
-    public abstract Dictionary<string, string> GetDisplayValues();
+    public abstract KVList<string, string> GetDisplayValues();
 
     public abstract IEnumerable<Node> GetChildren();
 

@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PathNode : Node
 {
     public List<PathNode> children = new List<PathNode>();
     public Node linked;
+    public KVList<string, string> displayValues = new KVList<string, string>();
 
     public PathNode(Node linked)
     {
@@ -33,8 +35,18 @@ public class PathNode : Node
         return linked.GetName();
     }
 
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        return linked.GetDisplayValues();   
+        KVList<string, string> combined = new KVList<string, string>();
+        foreach (var x in linked.GetDisplayValues())
+        {
+            combined.Add(x);
+        }
+        foreach (var x in displayValues)
+        {
+            combined.Add(x);
+        }
+
+        return combined;
     }
 }

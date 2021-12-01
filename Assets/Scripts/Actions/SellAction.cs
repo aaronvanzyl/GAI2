@@ -22,10 +22,10 @@ public class SellAction : Action
         Entity merchant = world.GetEntity(merchantID);
 
         merchant.QuerySellPrice(world, itemID, actorID, out int price);
-        Expression resolvedPrice = resolvedAmount * price;
+        Expression resolvedNetPrice = resolvedAmount * price;
 
-        actor.money += resolvedPrice;
-        merchant.money -= resolvedPrice;
+        actor.money += resolvedNetPrice;
+        merchant.money -= resolvedNetPrice;
         actor.ReduceItem(itemID, resolvedAmount);
         merchant.AddItem(itemID, resolvedAmount);
     }
@@ -59,9 +59,9 @@ public class SellAction : Action
     {
         return new SellAction(actorID, merchantID, itemID);
     }
-    public override Dictionary<string, string> GetDisplayValues()
+    public override KVList<string, string> GetDisplayValues()
     {
-        Dictionary<string, string> displayValues = base.GetDisplayValues();
+        KVList<string, string> displayValues = base.GetDisplayValues();
         displayValues.Add("Merchant ID", merchantID.ToString());
         displayValues.Add("Item ID", itemID.ToString());
         displayValues.Add("Amount", amount.ToString());

@@ -19,8 +19,8 @@ public abstract class Action: Node
         return conditions;
     }
 
-    public override Dictionary<string, string> GetDisplayValues() {
-        Dictionary<string, string> displayValues = new Dictionary<string, string>();
+    public override KVList<string, string> GetDisplayValues() {
+        KVList<string, string> displayValues = new KVList<string, string>();
         displayValues.Add("Actor ID", actorID.ToString());
         return displayValues;
     }

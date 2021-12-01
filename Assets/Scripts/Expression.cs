@@ -39,10 +39,23 @@ public class Expression : IReadOnlyExpression
         return new Expression(Evaluate(variables));
     }
 
-    public string ToString() {
-        string str = ""+constant;
+    public override string ToString() {
+        string str = "";
+        if (constant != 0)
+        {
+            str += constant;
+        }
         foreach (KeyValuePair<int, float> kv in coefficients) {
-            str += $" + {kv.Value}({kv.Key})";
+            if (str.Length > 0) {
+                str += kv.Value >= 0 ? " + " : " - ";
+            }
+            else if (kv.Value < 0) {
+                str += "-";
+            }
+            if (Mathf.Abs(kv.Value) != 1) {
+                str += Mathf.Abs(kv.Value);
+            }
+            str += "{"+kv.Key+"}";
         }
         return str;
     }
