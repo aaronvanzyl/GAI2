@@ -29,11 +29,18 @@ public class PosCondition : Condition
         return world.GetReadOnlyEntity(moverID).pos == world.GetReadOnlyEntity(targetID).pos;
     }
 
-    public override KVList<string, string> GetDisplayValues()
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> displayValues = base.GetDisplayValues();
+    //    displayValues.Add("Mover ID", moverID.ToString());
+    //    displayValues.Add("Target ID", targetID.ToString());
+    //    return displayValues;
+    //}
+
+    public override void AddProperties(NodeRenderer renderer)
     {
-        KVList<string, string> displayValues = base.GetDisplayValues();
-        displayValues.Add("Mover ID", moverID.ToString());
-        displayValues.Add("Target ID", targetID.ToString());
-        return displayValues;
+        base.AddProperties(renderer);
+        renderer.AddEntityIDProp("Mover", moverID);
+        renderer.AddEntityIDProp("Target", targetID);
     }
 }

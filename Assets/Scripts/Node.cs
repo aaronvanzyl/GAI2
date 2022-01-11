@@ -13,7 +13,9 @@ public abstract class Node
         return GetType().ToString();
     }
 
-    public abstract KVList<string, string> GetDisplayValues();
+    public virtual void AddProperties(NodeRenderer renderer) { 
+        
+    }
 
     public abstract IEnumerable<Node> GetChildren();
 

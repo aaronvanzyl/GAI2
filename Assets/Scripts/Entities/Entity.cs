@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Entity : IReadOnlyEntity
 {
-    public int ID { get; set; }
-    public string name { get; set; }
-    public Vector2Int pos { get; set; }
-    public Expression money { get; set; }
+    public int ID { get; set; } = -1;
+    public string name { get; set; } = "ERROR NO NAME";
+    public Vector2Int pos { get; set; } = Vector2Int.zero;
+    public Expression money { get; set; } = new Expression(0);
     public IReadOnlyExpression readOnlyMoney => money;
 
     protected Dictionary<int, Expression> inventory = new Dictionary<int, Expression>();
-    public bool canBuyFrom { get; set; }
-    public bool canSellTo { get; set; }
+
+    public bool canBuyFrom { get; set; } = false;
+    public bool canSellTo { get; set; } = false;
 
     public bool QuerySellPrice(IReadOnlyWorld world, int itemID, int sellerID, out int price)
     {

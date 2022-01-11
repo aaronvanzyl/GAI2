@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NodeTreeRenderer : MonoBehaviour
+public class PlanUIManager : MonoBehaviour
 {
+    public IReadOnlyWorld world;
+    public Dictionary<int, int> varDict;
+
     public NodeRenderer nodeRendererPrefab;
     public bool alignHorizontal = true;
     public float nodeWidth = 1;
     public float nodeHeight = 1;
     public bool center = false;
 
-    public void RenderTree(Node rootNode)
+    public void RenderTree(Node rootNode, IReadOnlyWorld world, Dictionary<int,int> varDict)
     {
         rootNode.CalculateWidthRecursive();
+        this.world = world;
+        this.varDict = varDict;
         RenderTreeRecursive(rootNode, Vector3.zero);
     }
 
@@ -20,7 +25,9 @@ public class NodeTreeRenderer : MonoBehaviour
     {
         //Debug.Log($"rendering node: in: {children} out: {node.outNode != null}");
         NodeRenderer renderer = Instantiate(nodeRendererPrefab, position, Quaternion.identity, transform);
+        renderer.manager = this;
         renderer.SetNode(node);
+        node.AddProperties(renderer);
         //renderer.transform.localScale = alignHorizontal ? new Vector3(1, node.width, 1) : new Vector3(node.width, 1, 1);
 
         float offset = center ? -node.width * 0.5f : 0;

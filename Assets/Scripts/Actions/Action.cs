@@ -19,9 +19,15 @@ public abstract class Action: Node
         return conditions;
     }
 
-    public override KVList<string, string> GetDisplayValues() {
-        KVList<string, string> displayValues = new KVList<string, string>();
-        displayValues.Add("Actor ID", actorID.ToString());
-        return displayValues;
+    //public override KVList<string, string> GetDisplayValues() {
+    //    KVList<string, string> displayValues = new KVList<string, string>();
+    //    displayValues.Add("Actor ID", actorID.ToString());
+    //    return displayValues;
+    //}
+
+    public override void AddProperties(NodeRenderer renderer)
+    {
+        base.AddProperties(renderer);
+        renderer.AddEntityIDProp("Actor", actorID);
     }
 }

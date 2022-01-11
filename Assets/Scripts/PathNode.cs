@@ -35,18 +35,23 @@ public class PathNode : Node
         return linked.GetName();
     }
 
-    public override KVList<string, string> GetDisplayValues()
-    {
-        KVList<string, string> combined = new KVList<string, string>();
-        foreach (var x in linked.GetDisplayValues())
-        {
-            combined.Add(x);
-        }
-        foreach (var x in displayValues)
-        {
-            combined.Add(x);
-        }
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> combined = new KVList<string, string>();
+    //    foreach (var x in linked.GetDisplayValues())
+    //    {
+    //        combined.Add(x);
+    //    }
+    //    foreach (var x in displayValues)
+    //    {
+    //        combined.Add(x);
+    //    }
 
-        return combined;
+    //    return combined;
+    //}
+
+    public override void AddProperties(NodeRenderer renderer)
+    {
+        linked.AddProperties(renderer);
     }
 }

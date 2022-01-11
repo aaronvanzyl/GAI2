@@ -25,12 +25,21 @@ public class CanSellCondition : Condition
         return world.GetReadOnlyEntity(merchantID).QuerySellPrice(world, itemID, sellerID, out _);
     }
 
-    public override KVList<string, string> GetDisplayValues()
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> displayValues = base.GetDisplayValues();
+    //    displayValues.Add("Merchant ID", merchantID.ToString());
+    //    displayValues.Add("Seller ID", sellerID.ToString());
+    //    displayValues.Add("Item ID", itemID.ToString());
+    //    return displayValues;
+    //}
+
+    public override void AddProperties(NodeRenderer renderer)
     {
-        KVList<string, string> displayValues = base.GetDisplayValues();
-        displayValues.Add("Merchant ID", merchantID.ToString());
-        displayValues.Add("Seller ID", sellerID.ToString());
-        displayValues.Add("Item ID", itemID.ToString());
-        return displayValues;
+        base.AddProperties(renderer);
+        renderer.AddEntityIDProp("Merchant", merchantID);
+        renderer.AddEntityIDProp("Seller", sellerID);
+        renderer.AddItemIDProp("Item", itemID);
+
     }
 }

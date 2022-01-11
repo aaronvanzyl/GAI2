@@ -40,13 +40,21 @@ public class OwnItemCondition : Condition
         return owner.GetItemCount(itemID).constant >= amount.Evaluate(variables);
     }
 
-    public override KVList<string, string> GetDisplayValues()
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> displayValues = base.GetDisplayValues();
+    //    displayValues.Add("Owner ID", ownerID.ToString());
+    //    displayValues.Add("Item ID", itemID.ToString());
+    //    displayValues.Add("Amount", amount.ToString());
+    //    return displayValues;
+    //}
+
+    public override void AddProperties(NodeRenderer renderer)
     {
-        KVList<string, string> displayValues = base.GetDisplayValues();
-        displayValues.Add("Owner ID", ownerID.ToString());
-        displayValues.Add("Item ID", itemID.ToString());
-        displayValues.Add("Amount", amount.ToString());
-        return displayValues;
+        base.AddProperties(renderer);
+        renderer.AddEntityIDProp("Owner", ownerID);
+        renderer.AddItemIDProp("Item", itemID);
+        renderer.AddExpressionProp("Amount", amount);
     }
 
     public override List<Inequality> GenerateInequalities(IReadOnlyWorld world)

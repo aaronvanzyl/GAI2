@@ -19,7 +19,7 @@ public class MoveAction : Action
 
     public override void Execute(World world)
     {
-        world.GetEntity(actorID).pos = world.GetEntity(targetID).pos;
+        world.GetEntity(actorID).pos = world.GetReadOnlyEntity(targetID).pos;
     }
 
     public override void ExecuteSolved(World world, Dictionary<int, int> variables)
@@ -32,10 +32,16 @@ public class MoveAction : Action
         return new List<Condition>();
     }
 
-    public override KVList<string, string> GetDisplayValues()
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> displayValues = base.GetDisplayValues();
+    //    displayValues.Add("Target ID", targetID.ToString());
+    //    return displayValues;
+    //}
+
+    public override void AddProperties(NodeRenderer renderer)
     {
-        KVList<string, string> displayValues = base.GetDisplayValues();
-        displayValues.Add("Target ID", targetID.ToString());
-        return displayValues;
+        base.AddProperties(renderer);
+        renderer.AddEntityIDProp("Target", targetID);
     }
 }

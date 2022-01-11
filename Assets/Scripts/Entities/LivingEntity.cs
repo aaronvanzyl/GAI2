@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : Entity
+public class LivingEntity : Entity
 {
-
-
     public override Entity Clone()
     {
-        Character clone = new Character();
+        LivingEntity clone = new LivingEntity();
         clone.CopyFrom(this);
         return clone;
     }

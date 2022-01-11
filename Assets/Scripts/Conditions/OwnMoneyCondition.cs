@@ -44,14 +44,20 @@ public class OwnMoneyCondition : Condition
         return owner.readOnlyMoney.constant >= amount.Evaluate(variables);
     }
 
-    public override KVList<string, string> GetDisplayValues()
-    {
-        KVList<string, string> displayValues = base.GetDisplayValues();
-        displayValues.Add("Owner ID", ownerID.ToString());
-        displayValues.Add("Amount", amount.ToString());
-        return displayValues;
-    }
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> displayValues = base.GetDisplayValues();
+    //    displayValues.Add("Owner ID", ownerID.ToString());
+    //    displayValues.Add("Amount", amount.ToString());
+    //    return displayValues;
+    //}
 
+    public override void AddProperties(NodeRenderer renderer)
+    {
+        base.AddProperties(renderer);
+        renderer.AddEntityIDProp("Owner", ownerID);
+        renderer.AddExpressionProp("Amount", amount);
+    }
     public override List<Inequality> GenerateInequalities(IReadOnlyWorld world)
     {
         IReadOnlyEntity owner = world.GetReadOnlyEntity(ownerID);

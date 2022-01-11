@@ -7,7 +7,7 @@ public class Expression : IReadOnlyExpression
     static int maxVariableID;
 
     public int constant { get; set; }
-    public Dictionary<int, float> coefficients = new Dictionary<int, float>();
+    public SortedList<int, float> coefficients = new SortedList<int, float>();
 
     public Expression(int constant)
     {

@@ -59,13 +59,20 @@ public class SellAction : Action
     {
         return new SellAction(actorID, merchantID, itemID);
     }
-    public override KVList<string, string> GetDisplayValues()
-    {
-        KVList<string, string> displayValues = base.GetDisplayValues();
-        displayValues.Add("Merchant ID", merchantID.ToString());
-        displayValues.Add("Item ID", itemID.ToString());
-        displayValues.Add("Amount", amount.ToString());
-        return displayValues;
-    }
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> displayValues = base.GetDisplayValues();
+    //    displayValues.Add("Merchant ID", merchantID.ToString());
+    //    displayValues.Add("Item ID", itemID.ToString());
+    //    displayValues.Add("Amount", amount.ToString());
+    //    return displayValues;
+    //}
 
+    public override void AddProperties(NodeRenderer renderer)
+    {
+        base.AddProperties(renderer);
+        renderer.AddEntityIDProp("Merchant", merchantID);
+        renderer.AddItemIDProp("Item", itemID);
+        renderer.AddExpressionProp("Amount", amount);
+    }
 }

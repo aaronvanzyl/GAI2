@@ -16,10 +16,15 @@ public abstract class Condition: Node
         return actions;
     }
 
-    public override KVList<string, string> GetDisplayValues()
+    //public override KVList<string, string> GetDisplayValues()
+    //{
+    //    KVList<string, string> displayValues = new KVList<string, string>();
+    //    return displayValues;
+    //}
+
+    public override void AddProperties(NodeRenderer renderer)
     {
-        KVList<string, string> displayValues = new KVList<string, string>();
-        return displayValues;
+        base.AddProperties(renderer);
     }
 
     public virtual List<Inequality> GenerateInequalities(IReadOnlyWorld world) => new List<Inequality>();
