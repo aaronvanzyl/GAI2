@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FishAction : SimpleItemAction
 {
-    public FishAction(int actorID, int giverID, int itemID) : base(actorID, giverID, itemID)
+
+    public FishAction(int actorID, int giverID, int itemID, float timePerItem) : base(actorID, giverID, itemID, timePerItem)
     {
     }
 

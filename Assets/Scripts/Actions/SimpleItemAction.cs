@@ -4,27 +4,36 @@ using UnityEngine;
 
 public abstract class SimpleItemAction : Action
 {
+
     public Expression amount;
+    public float timePerItem;
     public int giverID;
     public int itemID;
 
-    public SimpleItemAction(int actorID, int giverID, int itemID) {
+    public SimpleItemAction(int actorID, int giverID, int itemID, float timePerItem) {
         this.actorID = actorID;
         this.giverID = giverID;
         this.itemID = itemID;
+        this.timePerItem = timePerItem;
         this.amount = Expression.UniqueExpression();
     }
 
-    protected void ExecuteHelper(World world, Expression resolvedAmount) {
-        Entity actor = world.GetEntity(actorID);
-        actor.AddItem(itemID, resolvedAmount);
-    }
-
     public override void Execute(World world) {
-        ExecuteHelper(world, amount);
+        Entity actor = world.GetEntity(actorID);
+        actor.AddItem(itemID, amount);
     }
-    public override void ExecuteSolved(World world, Dictionary<int, int> variables) {
-        ExecuteHelper(world, amount.EvaluateToExpression(variables));
+    public override ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time)
+    {
+        int pastItemsGained = progress == null ? 0 : ((CounterProgress)progress).count;
+        int itemsNeeded = amount.Evaluate(variables) - pastItemsGained;
+        int itemsGained = Mathf.Min((int)(time / timePerItem), itemsNeeded);
+        int totalItemsGained = itemsGained + pastItemsGained;
+        float timeUsed = itemsGained * timePerItem;
+
+        Entity actor = world.GetEntity(actorID);
+        actor.AddItem(itemID, new Expression(itemsGained));
+
+        return new CounterProgress(totalItemsGained == itemsNeeded, time - timeUsed, totalItemsGained);
     }
     public override List<Condition> GenerateConditions(IReadOnlyWorld world)
     {

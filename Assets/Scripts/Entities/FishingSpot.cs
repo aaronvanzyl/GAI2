@@ -6,7 +6,7 @@ public class FishingSpot : Entity
 {
     public List<int> fishingItems = new List<int>();
 
-    public override List<Action> GenerateItemActions(int actorID, int itemID, Expression amount)
+    public override List<Action> GenerateItemActions(int actorID, int itemID)
     {
         if (fishingItems.Contains(itemID)) {
             Action fishAction = new FishAction(actorID, ID, itemID);

@@ -83,7 +83,7 @@ public class Entity : IReadOnlyEntity
         return e;
     }
 
-    public virtual List<Action> GenerateItemActions(int actorID, int itemID, Expression amount)
+    public virtual List<Action> GenerateItemActions(int actorID, int itemID)
     {
         return new List<Action>();
     }

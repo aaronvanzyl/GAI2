@@ -22,9 +22,11 @@ public class MoveAction : Action
         world.GetEntity(actorID).pos = world.GetReadOnlyEntity(targetID).pos;
     }
 
-    public override void ExecuteSolved(World world, Dictionary<int, int> variables)
+    public override ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time)
     {
+        // TODO: implement movement
         Execute(world);
+        return new ActionProgress(true, time);
     }
 
     public override List<Condition> GenerateConditions(IReadOnlyWorld world)

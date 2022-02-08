@@ -9,7 +9,7 @@ public interface IReadOnlyEntity
     public Vector2Int pos { get; }
     public IReadOnlyExpression readOnlyMoney { get; }
 
-    public List<Action> GenerateItemActions(int actorID, int itemID, Expression amount);
+    public List<Action> GenerateItemActions(int actorID, int itemID);
     public IReadOnlyExpression GetItemCount(int itemID);
     public IEnumerable<int> ItemsInInventory();
     //public IReadOnlyDictionary<int, IReadOnlyExpression> ReadOnlyInventory();

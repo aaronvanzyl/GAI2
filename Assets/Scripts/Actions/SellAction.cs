@@ -35,9 +35,10 @@ public class SellAction : Action
         ExecuteHelper(world, amount);
     }
 
-    public override void ExecuteSolved(World world, Dictionary<int, int> variables)
+    public override ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time)
     {
         ExecuteHelper(world, amount.EvaluateToExpression(variables));
+        return new ActionProgress(true, time);
     }
 
     public override List<Condition> GenerateConditions(IReadOnlyWorld world)
