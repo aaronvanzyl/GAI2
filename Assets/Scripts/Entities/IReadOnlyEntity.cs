@@ -8,12 +8,11 @@ public interface IReadOnlyEntity
     public string name { get; }
     public Vector2Int pos { get; }
     public IReadOnlyExpression readOnlyMoney { get; }
-
+    public AIConfig aiConfig { get; }
     public List<Action> GenerateItemActions(int actorID, int itemID);
     public IReadOnlyExpression GetItemCount(int itemID);
     public IEnumerable<int> ItemsInInventory();
     //public IReadOnlyDictionary<int, IReadOnlyExpression> ReadOnlyInventory();
-
     public bool canBuyFrom { get; }
     public bool canSellTo { get; }
     /// <summary>
@@ -22,6 +21,7 @@ public interface IReadOnlyEntity
     /// </summary>
     public bool QuerySellPrice(IReadOnlyWorld world, int itemID, int sellerID, out int price);
     public bool QueryBuyPrice(IReadOnlyWorld world, int itemID, int buyerID, out int price);
-
+    public float MoneyChangeCost(int amount);
+    public float ItemChangeCost(IReadOnlyWorld world, int itemID, int amount);
     public Entity Clone();
 }

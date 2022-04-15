@@ -41,9 +41,19 @@ public class MoveAction : Action
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Target", targetID);
+    }
+
+    public override float EstimateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
+    {
+        return 0;
+    }
+
+    public override float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables)
+    {
+        throw new System.NotImplementedException();
     }
 }

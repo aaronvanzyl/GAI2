@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+// PathNodes are a specific path through the complete node tree
+// A PathNode may be reused in multiple paths
+// Action PathNode has many condition children
+// Condition PathNode has exactly one action
+
+
 public class PathNode : Node
 {
     public List<PathNode> children = new List<PathNode>();
     public Node linked;
-    public KVList<string, string> displayValues = new KVList<string, string>();
 
     public PathNode(Node linked)
     {
         this.linked = linked;
     }
-
 
     public PathNode DeepClone()
     {
@@ -50,8 +54,8 @@ public class PathNode : Node
     //    return combined;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        linked.AddProperties(renderer);
+        linked.AddPropertiesTo(renderer);
     }
 }

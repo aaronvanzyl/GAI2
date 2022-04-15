@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class FishingSpot : Entity
 {
-    public List<int> fishingItems = new List<int>();
+    public List<ItemTimePair> fishingItems = new List<ItemTimePair>();
 
     public override List<Action> GenerateItemActions(int actorID, int itemID)
     {
-        if (fishingItems.Contains(itemID)) {
-            Action fishAction = new FishAction(actorID, ID, itemID);
-            return new List<Action>() { fishAction };
+        List<Action> actions = new List<Action>();
+        foreach(ItemTimePair entry in fishingItems) {
+            if (entry.itemID == itemID) {
+                Action fishAction = new FishAction(actorID, ID, itemID, entry.timePerItem);
+                actions.Add(fishAction);
+            }
         }
-        return new List<Action>();
+        return actions;
     }
 
     public override Entity Clone() {
-        List<int> fishingItemsClone = new List<int>(fishingItems);
+        List<ItemTimePair> fishingItemsClone = new List<ItemTimePair>(fishingItems);
         FishingSpot clone = new FishingSpot();
         clone.CopyFrom(this);
         clone.fishingItems = fishingItemsClone;

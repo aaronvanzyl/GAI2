@@ -23,7 +23,7 @@ public class OwnMoneyCondition : Condition
             possibleSaleItems.AddRange(actor.ItemsInInventory());
             possibleSaleItems.AddRange(world.ItemsWithTag(ItemTag.saleItem));
 
-            IEnumerable<IReadOnlyEntity> inRange = world.ReadOnlyEntitiesByDistance(actor.pos, AIConfig.maxEntitySearchDist);
+            IEnumerable<IReadOnlyEntity> inRange = world.ReadOnlyEntitiesByDistance(actor.pos,actor.aiConfig.maxEntitySearchDist);
             foreach (IReadOnlyEntity merchant in inRange) {
                 if (merchant.canSellTo) {
                     foreach (int itemID in possibleSaleItems) {
@@ -52,9 +52,9 @@ public class OwnMoneyCondition : Condition
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Owner", ownerID);
         renderer.AddExpressionProp("Amount", amount);
     }

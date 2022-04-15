@@ -8,11 +8,11 @@ public class ExpressionRenderer : PropertyRenderer
     public IReadOnlyExpression expression;
     public Text expressionText;
 
-    public override void Render()
+    public override void Render(IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict)
     {
-        base.Render();
-        if (manager.varDict.Count > 0 && expression.readonlyCoefficients.Count > 0) {
-            expressionText.text = $"{expression.Evaluate(manager.varDict)} || {expression}";
+        base.Render(world, varDict);
+        if (expression.CanEvaluate(varDict) && expression.readonlyCoefficients.Count > 0) {
+            expressionText.text = $"{expression.Evaluate(varDict)} || {expression}";
         }
         else {
             expressionText.text = expression.ToString();

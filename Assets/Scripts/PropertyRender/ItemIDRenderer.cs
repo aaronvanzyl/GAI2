@@ -8,10 +8,10 @@ public class ItemIDRenderer : PropertyRenderer
     public Text itemIDText;
     public int itemID;
 
-    public override void Render()
+    public override void Render(IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict)
     {
-        base.Render();
-        IReadOnlyItem item = manager.world.GetItem(itemID);
+        base.Render(world, varDict);
+        IReadOnlyItem item = world.GetItem(itemID);
         itemIDText.text = $"{item.name} <{itemID}>";
     }
 }

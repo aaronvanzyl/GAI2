@@ -37,9 +37,9 @@ public class PosCondition : Condition
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Mover", moverID);
         renderer.AddEntityIDProp("Target", targetID);
     }

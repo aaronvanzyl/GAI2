@@ -24,7 +24,7 @@ public class Expression : IReadOnlyExpression
 
     public IReadOnlyDictionary<int, float> readonlyCoefficients => coefficients;
 
-    public int Evaluate(Dictionary<int, int> variables)
+    public int Evaluate(IReadOnlyDictionary<int, int> variables)
     {
         float sum = constant;
         foreach (KeyValuePair<int, float> entry in coefficients)
@@ -34,7 +34,18 @@ public class Expression : IReadOnlyExpression
         return (int)sum;
     }
 
-    public Expression EvaluateToExpression(Dictionary<int, int> variables)
+    public bool CanEvaluate(IReadOnlyDictionary<int, int> variables)
+    {
+        foreach (KeyValuePair<int, float> entry in coefficients)
+        {
+            if (!variables.ContainsKey(entry.Key)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Expression EvaluateToExpression(IReadOnlyDictionary<int, int> variables)
     {
         return new Expression(Evaluate(variables));
     }

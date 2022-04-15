@@ -10,5 +10,6 @@ public interface IReadOnlyExpression
     public bool StrictlyGEQ(IReadOnlyExpression other);
     public bool StrictlyLEQ(IReadOnlyExpression other);
     public IReadOnlyExpression Clone();
-    public abstract int Evaluate(Dictionary<int, int> variables);
+    public abstract int Evaluate(IReadOnlyDictionary<int, int> variables);
+    public bool CanEvaluate(IReadOnlyDictionary<int, int> variables);
 }

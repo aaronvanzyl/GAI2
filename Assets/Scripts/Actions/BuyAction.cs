@@ -70,15 +70,15 @@ public class BuyAction : Action
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Merchant", merchantID);
         renderer.AddItemIDProp("Item", itemID);
         renderer.AddExpressionProp("Amount", amount);
     }
 
-    public override float CalcCost(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float EstimateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
     {
         IReadOnlyEntity actor = world.GetReadOnlyEntity(actorID);
         IReadOnlyEntity merchant = world.GetReadOnlyEntity(merchantID);
@@ -86,7 +86,14 @@ public class BuyAction : Action
         int resolvedAmount = amount.Evaluate(variables);
         merchant.QueryBuyPrice(world, itemID, actorID, out int price);
         int resolvedPrice = resolvedAmount * price;
+        float cost = 0;
+        cost += actor.MoneyChangeCost(-resolvedPrice);
+        cost += actor.ItemChangeCost(world, itemID, resolvedAmount);
+        return cost;
+    }
 
-        return resolvedPrice;
+    public override float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables)
+    {
+        return 0;
     }
 }

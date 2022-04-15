@@ -5,8 +5,6 @@ using UnityEngine;
 
 public static class PlanGenerator
 {
-
-
     /// <summary>
     /// Expands condition/action tree in-place
     /// </summary>
@@ -50,6 +48,7 @@ public static class PlanGenerator
                 condPath.children = new List<PathNode> { actionPath };
                 condPaths.Add(condPath);
             }
+            Debug.Log($"Total paths for {condition.GetName()}: {condPaths.Count}");
         }
         return condPaths;
     }
@@ -115,10 +114,10 @@ public static class PlanGenerator
                     Debug.Log(ineq);
                 }
                 inequalities.AddRange(nodeIneqs);
-                if (nodeIneqs.Count > 0)
-                {
-                    pathNode.displayValues.Add("Inequalities", string.Join(", ", nodeIneqs.Select(x => x.ToString())));
-                }
+                //if (nodeIneqs.Count > 0)
+                //{
+                //    pathNode.displayValues.Add("Inequalities", string.Join(", ", nodeIneqs.Select(x => x.ToString())));
+                //}
             }
             else if (linked is Action linkedAction)
             {

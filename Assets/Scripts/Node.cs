@@ -13,8 +13,10 @@ public abstract class Node
         return GetType().ToString();
     }
 
-    public virtual void AddProperties(NodeRenderer renderer) { 
-        
+    public virtual void AddPropertiesTo(PropertyGroupRenderer renderer) {
+        renderer.header.text = GetName();
+        //renderer.canvas.sizeDelta *= new Vector2(width, 1);
+
     }
 
     public abstract IEnumerable<Node> GetChildren();

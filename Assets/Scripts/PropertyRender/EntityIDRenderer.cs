@@ -8,10 +8,10 @@ public class EntityIDRenderer : PropertyRenderer
     public int entityID;
     public Text entityIDText;
 
-    public override void Render()
+    public override void Render(IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict)
     {
-        base.Render();
-        IReadOnlyEntity entity = manager.world.GetReadOnlyEntity(entityID);
+        base.Render(world, varDict);
+        IReadOnlyEntity entity = world.GetReadOnlyEntity(entityID);
         entityIDText.text = $"{entity.name} [{entityID}]";
     }
 }

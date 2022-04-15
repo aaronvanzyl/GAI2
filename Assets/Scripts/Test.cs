@@ -67,7 +67,7 @@ public class Test : MonoBehaviour
         {
             name = "Lake",
             pos = new Vector2Int(0, 5),
-            fishingItems = new List<int>() { fishID }
+            fishingItems = new List<ItemTimePair>() { new ItemTimePair(fishID, fish.value) }
         };
         world.AddEntity(fishingSpot);
 
@@ -78,22 +78,27 @@ public class Test : MonoBehaviour
         List<PathNode> solutionTrees = PlanGenerator.Paths(ownItemCond);
         List<PathNode> solvedSolutionTrees = new List<PathNode>();
         List<Dictionary<int, int>> varDicts = new List<Dictionary<int, int>>();
-        //foreach(PathNode n in solutionTrees)
-        //{
-        //    List<Inequality> inequalities = PlanGenerator.GenerateInequalities(world, n);
-        //    if (IneqSolver.Solve(inequalities, out Dictionary<int, int> varDict)) {
-        //        solvedSolutionTrees.Add(n);
-        //        varDicts.Add(varDict);
-        //    }
-        //}
-
-        PathNode n = solutionTrees[1]; 
-        List<Inequality> inequalities = PlanGenerator.GenerateInequalities(world, n);
-        if (IneqSolver.Solve(inequalities, out Dictionary<int, int> varDict))
+        foreach(PathNode n in solutionTrees)
         {
-            solvedSolutionTrees.Add(n);
-            varDicts.Add(varDict);
+            List<Inequality> inequalities = PlanGenerator.GenerateInequalities(world, n);
+            if (IneqSolver.Solve(inequalities, out Dictionary<int, int> varDict))
+            {
+                solvedSolutionTrees.Add(n);
+                varDicts.Add(varDict);
+            }
         }
+        print($"found {solutionTrees.Count} solutions");
+        foreach (PathNode node in solutionTrees) {
+            print($"Tree starting with action {node.children[0].GetName()}");
+        }
+
+        //PathNode n = solutionTrees[0]; 
+        //List<Inequality> inequalities = PlanGenerator.GenerateInequalities(world, n);
+        //if (IneqSolver.Solve(inequalities, out Dictionary<int, int> varDict))
+        //{
+        //    solvedSolutionTrees.Add(n);
+        //    varDicts.Add(varDict);
+        //}
 
 
         print($"found {solvedSolutionTrees.Count}/{solutionTrees.Count} valid solutions");
@@ -102,8 +107,8 @@ public class Test : MonoBehaviour
         //    print(ineq);
         //}
 
-        //treeRenderer.RenderTree(ownItemCond);
-        planUIManager.RenderTree(solutionTrees[1], world, varDict);
+        //planUIManager.RenderTree(ownItemCond, world, new Dictionary<int, int>());
+        planUIManager.RenderTree(solutionTrees[1], world, new Dictionary<int, int>()); 
     }
 
 }

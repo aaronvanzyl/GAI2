@@ -11,7 +11,8 @@ public abstract class Action: Node
 
     public abstract void Execute(World world);
     public abstract ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time);
-    public abstract float CalcCost(IReadOnlyWorld world, Dictionary<int, int> variables);
+    public abstract float EstimateCost(IReadOnlyWorld world, Dictionary<int, int> variables);
+    public abstract float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables);
     public abstract List<Condition> GenerateConditions(IReadOnlyWorld world);
     public abstract Action Clone();
 
@@ -26,9 +27,9 @@ public abstract class Action: Node
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Actor", actorID);
     }
 }

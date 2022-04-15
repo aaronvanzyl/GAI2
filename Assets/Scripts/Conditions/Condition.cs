@@ -22,9 +22,9 @@ public abstract class Condition: Node
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
     }
 
     public virtual List<Inequality> GenerateInequalities(IReadOnlyWorld world) => new List<Inequality>();

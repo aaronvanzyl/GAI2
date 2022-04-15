@@ -21,9 +21,9 @@ public class OwnItemCondition : Condition
         {
             List<Action> actions = new List<Action>();
             IReadOnlyEntity actor = world.GetReadOnlyEntity(actorID);
-            IEnumerable<IReadOnlyEntity> inRange = world.ReadOnlyEntitiesByDistance(actor.pos, AIConfig.maxEntitySearchDist);
+            IEnumerable<IReadOnlyEntity> inRange = world.ReadOnlyEntitiesByDistance(actor.pos, actor.aiConfig.maxEntitySearchDist);
             foreach (IReadOnlyEntity other in inRange) {
-                IReadOnlyList<Action> itemActions = other.GenerateItemActions(actorID, itemID, amount);
+                IReadOnlyList<Action> itemActions = other.GenerateItemActions(actorID, itemID);
                 actions.AddRange(itemActions);
                 if (other.QueryBuyPrice(world, itemID, actorID, out int price)) {
                     actions.Add(new BuyAction(actorID, other.ID, itemID));
@@ -49,9 +49,9 @@ public class OwnItemCondition : Condition
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Owner", ownerID);
         renderer.AddItemIDProp("Item", itemID);
         renderer.AddExpressionProp("Amount", amount);

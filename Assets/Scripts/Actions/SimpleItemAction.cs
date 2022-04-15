@@ -50,9 +50,9 @@ public abstract class SimpleItemAction : Action
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Giver", giverID);
         renderer.AddItemIDProp("Item", itemID);
         renderer.AddExpressionProp("Amount", amount);

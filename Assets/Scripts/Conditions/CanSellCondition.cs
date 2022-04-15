@@ -34,9 +34,9 @@ public class CanSellCondition : Condition
     //    return displayValues;
     //}
 
-    public override void AddProperties(NodeRenderer renderer)
+    public override void AddPropertiesTo(PropertyGroupRenderer renderer)
     {
-        base.AddProperties(renderer);
+        base.AddPropertiesTo(renderer);
         renderer.AddEntityIDProp("Merchant", merchantID);
         renderer.AddEntityIDProp("Seller", sellerID);
         renderer.AddItemIDProp("Item", itemID);

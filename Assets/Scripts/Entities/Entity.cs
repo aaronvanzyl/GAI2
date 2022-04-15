@@ -15,6 +15,8 @@ public class Entity : IReadOnlyEntity
     public bool canBuyFrom { get; set; } = false;
     public bool canSellTo { get; set; } = false;
 
+    public AIConfig aiConfig { get; set; } = AIConfig.neutral;
+
     public bool QuerySellPrice(IReadOnlyWorld world, int itemID, int sellerID, out int price)
     {
         if (!canSellTo)
@@ -77,7 +79,8 @@ public class Entity : IReadOnlyEntity
         canSellTo = other.canSellTo;
     }
 
-    public virtual Entity Clone() {
+    public virtual Entity Clone()
+    {
         Entity e = new Entity();
         e.CopyFrom(this);
         return e;
@@ -97,7 +100,31 @@ public class Entity : IReadOnlyEntity
         return new Expression(0);
     }
 
-    public IEnumerable<int> ItemsInInventory() {
+    public IEnumerable<int> ItemsInInventory()
+    {
         return inventory.Keys;
+    }
+
+    public float MoneyChangeCost(int amount)
+    {
+        if (amount < 0)
+        {
+            return -amount * aiConfig.moneyLossMult;
+        }
+        else {
+            return -amount * aiConfig.moneyGainMult;
+        }
+    }
+
+    public float ItemChangeCost(IReadOnlyWorld world, int itemID, int amount)
+    {
+        float baseItemValue = world.GetItem(itemID).value;
+        if (amount < 0)
+        {
+            return -baseItemValue * amount * aiConfig.itemLossMult;
+        }
+        else {
+            return -baseItemValue * amount * aiConfig.itemGainMult;
+        }
     }
 }
