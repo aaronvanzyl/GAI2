@@ -5,12 +5,15 @@ using UnityEngine;
 
 public static class PlanGenerator
 {
+    static readonly float maxTimePerAction = 1000;
+
     /// <summary>
     /// Expands condition/action tree in-place
     /// </summary>
     /// <param name="condition">Root condition</param>
     /// <param name="maxBranch">Max number of actions per condition</param>
     /// <param name="maxDepth">Max depth of tree (in actions)</param>
+    /// 
     public static void GenerateTree(World world, int actorID, Condition condition, int maxBranch, int maxDepth)
     {
         if (maxDepth == 0)
@@ -26,10 +29,29 @@ public static class PlanGenerator
                 GenerateTree(world, actorID, cond, maxBranch, maxDepth - 1);
             }
         }
+        int nextID = 0;
+        foreach (Node n in DFS(condition)) {
+            n.ID = nextID;
+            nextID++;
+        }
     }
 
     // Returns a new list of paths, where every path has a final world state ending with the (probably satisfied) given condition
-    public static List<PathNode> Paths(Condition condition)
+    public static List<PathNode> GeneratePathTrees(Condition condition)
+    {
+        List<PathNode> paths = Paths(condition);
+        int nextID = 0;
+        foreach (PathNode pathRoot in paths) {
+            foreach (PathNode n in DFS(pathRoot)) {
+                n.ID = nextID;
+                nextID++;
+            }
+        }
+        return paths;
+    }
+
+    // Returns a new list of paths, where every path has a final world state ending with the (probably satisfied) given condition
+    static List<PathNode> Paths(Condition condition)
     {
         if (condition.actions.Count == 0)
         {
@@ -54,7 +76,7 @@ public static class PlanGenerator
     }
 
     // Returns a new list of paths, where every path ends with the given action
-    public static List<PathNode> Paths(Action action)
+    static List<PathNode> Paths(Action action)
     {
         if (action.conditions.Count == 0)
         {
@@ -95,12 +117,12 @@ public static class PlanGenerator
         return visitOrder;
     }
 
-    public static List<Inequality> GenerateInequalities(IReadOnlyWorld underlying, PathNode root)
+    public static IReadOnlyDictionary<int, IEnumerable<Inequality>> GenerateInequalities(IReadOnlyWorld underlying, PathNode root)
     {
         World simulated = new World(underlying);
         List<Node> dfs = DFS(root);
 
-        List<Inequality> inequalities = new List<Inequality>();
+        Dictionary<int, IEnumerable<Inequality>> inequalities = new Dictionary<int, IEnumerable<Inequality>>();
         foreach (Node node in dfs)
         {
             PathNode pathNode = (PathNode)node;
@@ -109,11 +131,11 @@ public static class PlanGenerator
             if (linked is Condition linkedCond)
             {
                 List<Inequality> nodeIneqs = linkedCond.GenerateInequalities(simulated);
-                foreach (Inequality ineq in nodeIneqs)
-                {
-                    Debug.Log(ineq);
-                }
-                inequalities.AddRange(nodeIneqs);
+                //foreach (Inequality ineq in nodeIneqs)
+                //{
+                //    Debug.Log(ineq);
+                //}
+                inequalities.Add(node.ID, nodeIneqs);
                 //if (nodeIneqs.Count > 0)
                 //{
                 //    pathNode.displayValues.Add("Inequalities", string.Join(", ", nodeIneqs.Select(x => x.ToString())));
@@ -125,6 +147,43 @@ public static class PlanGenerator
             }
         }
         return inequalities;
+    }
+
+    public static IReadOnlyDictionary<int, float> CalculateCosts(IReadOnlyWorld underlying, PathNode root, Dictionary<int, int> varDict) 
+    {
+        World simulated = new World(underlying);
+        List<Node> dfs = DFS(root);
+
+        Dictionary<int, float> costs = new Dictionary<int, float>();
+        foreach (Node node in dfs)
+        {
+            PathNode pathNode = (PathNode)node;
+            Node linked = pathNode.linked;
+            if (linked is Condition linkedCond)
+            {
+                if (!linkedCond.SatisfiedSolved(simulated, varDict)) {
+                    Debug.LogWarning($"Condition not solved {linkedCond}");
+                }
+                //if (nodeIneqs.Count > 0)
+                //{
+                //    pathNode.displayValues.Add("Inequalities", string.Join(", ", nodeIneqs.Select(x => x.ToString())));
+                //}
+            }
+            else if (linked is Action linkedAction)
+            {
+                float cost = linkedAction.CalculateCost(simulated, varDict);
+                ActionProgress progress = linkedAction.ExecuteSolved(simulated, varDict, null, maxTimePerAction);
+                if (!progress.complete) {
+                    Debug.LogWarning($"Action failed to complete {linkedAction} | estimated {linkedAction.EstimateTime(simulated, varDict)} | progress {progress}");
+                    cost = float.PositiveInfinity;
+                }
+
+                costs.Add(node.ID, cost);
+
+            }
+        }
+        return costs;
+
     }
 
 
@@ -179,7 +238,7 @@ public static class PlanGenerator
     //    return combinedPaths;
     //}
 
-    public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
+    static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
     {
         IEnumerable<IEnumerable<T>> emptyProduct = new[] { Enumerable.Empty<T>() };
         IEnumerable<IEnumerable<T>> result = emptyProduct;
@@ -189,7 +248,4 @@ public static class PlanGenerator
         }
         return result;
     }
-
-
-
 }

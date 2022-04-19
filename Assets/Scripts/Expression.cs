@@ -36,6 +36,9 @@ public class Expression : IReadOnlyExpression
 
     public bool CanEvaluate(IReadOnlyDictionary<int, int> variables)
     {
+        if (variables == null) {
+            return false;
+        }
         foreach (KeyValuePair<int, float> entry in coefficients)
         {
             if (!variables.ContainsKey(entry.Key)) {

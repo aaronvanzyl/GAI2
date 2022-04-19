@@ -5,7 +5,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 public static class IneqSolver
 {
-    public static bool Solve(List<Inequality> ineqs, out Dictionary<int, int> varDict)
+    public static bool Solve(IEnumerable<Inequality> ineqs, out Dictionary<int, int> varDict)
     {
         // keys are expression var keys
         SortedSet<int> varKeys = new SortedSet<int>();

@@ -78,7 +78,7 @@ public class BuyAction : Action
         renderer.AddExpressionProp("Amount", amount);
     }
 
-    public override float EstimateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float CalculateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
     {
         IReadOnlyEntity actor = world.GetReadOnlyEntity(actorID);
         IReadOnlyEntity merchant = world.GetReadOnlyEntity(merchantID);

@@ -29,7 +29,7 @@ public class OwnItemCondition : Condition
                     actions.Add(new BuyAction(actorID, other.ID, itemID));
                 }
             }
-            return actions.Shuffle().Take(max).ToList();
+            return actions.Take(max).ToList();
         }
         return new List<Action>();
     }

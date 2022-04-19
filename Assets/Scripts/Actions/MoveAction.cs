@@ -47,7 +47,7 @@ public class MoveAction : Action
         renderer.AddEntityIDProp("Target", targetID);
     }
 
-    public override float EstimateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float CalculateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
     {
         return 0;
     }

@@ -7,14 +7,15 @@ using System;
 
 public abstract class Node
 {
-    public int width;
+    public int ID = -1; // id is unique within frame (separate action trees may duplicate ids - pathnodes may duplicate id with underlying nodes)
+    public int width; // Number of leaf nodes below this node
 
     public virtual string GetName() {
         return GetType().ToString();
     }
 
     public virtual void AddPropertiesTo(PropertyGroupRenderer renderer) {
-        renderer.header.text = GetName();
+        
         //renderer.canvas.sizeDelta *= new Vector2(width, 1);
 
     }

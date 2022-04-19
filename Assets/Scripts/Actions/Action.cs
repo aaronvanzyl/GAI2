@@ -11,7 +11,7 @@ public abstract class Action: Node
 
     public abstract void Execute(World world);
     public abstract ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time);
-    public abstract float EstimateCost(IReadOnlyWorld world, Dictionary<int, int> variables);
+    public abstract float CalculateCost(IReadOnlyWorld world, Dictionary<int, int> variables);
     public abstract float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables);
     public abstract List<Condition> GenerateConditions(IReadOnlyWorld world);
     public abstract Action Clone();

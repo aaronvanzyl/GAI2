@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class Test : MonoBehaviour
 {
     public PlanUIManager planUIManager;
@@ -13,7 +13,8 @@ public class Test : MonoBehaviour
         //TestIneqSolver();
     }
 
-    void TestIneqSolver() {
+    void TestIneqSolver()
+    {
         Expression a = new Expression(0);
         a.coefficients.Add(0, 1);
 
@@ -24,17 +25,21 @@ public class Test : MonoBehaviour
         Inequality A_geq_B = new Inequality(a, b, Comparator.GEQ);
 
         List<Inequality> ineqs = new List<Inequality>() { A_geq_B };
-        if (IneqSolver.Solve(ineqs, out Dictionary<int, int> varDict)) {
-            foreach (var kvPair in varDict) {
+        if (IneqSolver.Solve(ineqs, out Dictionary<int, int> varDict))
+        {
+            foreach (var kvPair in varDict)
+            {
                 Debug.Log(kvPair);
             }
         }
-        else {
+        else
+        {
             Debug.Log("Unable to solve!!");
         }
     }
 
-    void TestWorld() {
+    void TestWorld()
+    {
 
         Item fish = new Item()
         {
@@ -47,7 +52,7 @@ public class Test : MonoBehaviour
         LivingEntity actor = new LivingEntity()
         {
             name = "Actor",
-            money = new Expression(7),
+            money = new Expression(0),
             pos = new Vector2Int(0, 0)
         };
         world.AddEntity(actor);
@@ -75,22 +80,33 @@ public class Test : MonoBehaviour
 
 
         PlanGenerator.GenerateTree(world, actor.ID, ownItemCond, 5, 3);
-        List<PathNode> solutionTrees = PlanGenerator.Paths(ownItemCond);
-        List<PathNode> solvedSolutionTrees = new List<PathNode>();
-        List<Dictionary<int, int>> varDicts = new List<Dictionary<int, int>>();
-        foreach(PathNode n in solutionTrees)
+        List<PathNode> solutionTrees = PlanGenerator.GeneratePathTrees(ownItemCond);
+        List<int> solvedSolutionTrees = new List<int>(); 
+        List<IReadOnlyDictionary<int, int>> varDicts = new List<IReadOnlyDictionary<int, int>>(); 
+        List<IReadOnlyDictionary<int, IEnumerable<Inequality>>> solutionTreeIneqs = new List<IReadOnlyDictionary<int, IEnumerable<Inequality>>>();
+        for(int i = 0; i < solutionTrees.Count; i++)
         {
-            List<Inequality> inequalities = PlanGenerator.GenerateInequalities(world, n);
-            if (IneqSolver.Solve(inequalities, out Dictionary<int, int> varDict))
+            PathNode n = solutionTrees[i];
+            IReadOnlyDictionary<int, IEnumerable<Inequality>> inequalities = PlanGenerator.GenerateInequalities(world, n);
+            List<Inequality> allInequalities = new List<Inequality>();
+            foreach (IEnumerable<Inequality> ls in inequalities.Values) {
+                allInequalities.AddRange(ls);
+            }
+            solutionTreeIneqs.Add(inequalities);
+            if (IneqSolver.Solve(allInequalities, out Dictionary<int, int> varDict))
             {
-                solvedSolutionTrees.Add(n);
                 varDicts.Add(varDict);
+                solvedSolutionTrees.Add(i);
+            }
+            else {
+                varDicts.Add(null);
             }
         }
-        print($"found {solutionTrees.Count} solutions");
-        foreach (PathNode node in solutionTrees) {
-            print($"Tree starting with action {node.children[0].GetName()}");
-        }
+        //print($"found {solutionTrees.Count} solutions");
+        //foreach (PathNode node in solutionTrees)
+        //{
+        //    print($"Tree starting with action {node.children[0].GetName()}");
+        //}
 
         //PathNode n = solutionTrees[0]; 
         //List<Inequality> inequalities = PlanGenerator.GenerateInequalities(world, n);
@@ -108,7 +124,16 @@ public class Test : MonoBehaviour
         //}
 
         //planUIManager.RenderTree(ownItemCond, world, new Dictionary<int, int>());
-        planUIManager.RenderTree(solutionTrees[1], world, new Dictionary<int, int>()); 
+        int selectedTree = 1;
+        //foreach (Node n in PlanGenerator.DFS(solutionTrees[selectedTree])) {
+        //    if (solutionTreeIneqs[selectedTree].TryGetValue(n.ID, out IEnumerable<Inequality> ineqs) && ineqs.Any()) {
+        //        Debug.Log(n.ID);
+        //        foreach (Inequality ineq in ineqs) {
+        //            Debug.Log(ineq);
+        //        }
+        //    }
+        //}
+        planUIManager.RenderTree(solutionTrees[selectedTree], world, varDicts[selectedTree], solutionTreeIneqs[selectedTree]);
     }
 
 }

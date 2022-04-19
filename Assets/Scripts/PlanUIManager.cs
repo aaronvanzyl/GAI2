@@ -14,17 +14,27 @@ public class PlanUIManager : MonoBehaviour
     public bool center = false;
     public bool drawLines = true;
 
-    public void RenderTree(Node rootNode, IReadOnlyWorld world, Dictionary<int,int> varDict)
+    public void RenderTree(Node rootNode, IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict = null, IReadOnlyDictionary<int, IEnumerable<Inequality>> ineqs = null, IReadOnlyDictionary<int, float> costs = null)
     {
         rootNode.CalculateWidthRecursive();
-        RenderTreeRecursive(rootNode, Vector3.zero, world, varDict);
+        RenderTreeRecursive(rootNode, Vector3.zero, world, varDict, ineqs, costs);
     }
 
-    void RenderTreeRecursive(Node node, Vector3 position, IReadOnlyWorld world, Dictionary<int, int> varDict)
+    void RenderTreeRecursive(Node node, Vector3 position, IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict = null, IReadOnlyDictionary<int, IEnumerable<Inequality>> ineqs = null, IReadOnlyDictionary<int, float> costs = null)
     {
         //Debug.Log($"rendering node: in: {children} out: {node.outNode != null}");
         PropertyGroupRenderer renderer = Instantiate(nodeRendererPrefab, position, Quaternion.identity, transform);
         node.AddPropertiesTo(renderer);
+        renderer.header.text = $"{node.GetName()} [{node.ID}]";
+        if (costs != null && costs.TryGetValue(node.ID, out float cost))
+        {
+            renderer.AddStringProp("Cost", $"{cost:.3f}");
+        }
+        if (ineqs != null && ineqs.TryGetValue(node.ID, out IEnumerable<Inequality> nodeIneqs)) {
+            foreach (Inequality ineq in nodeIneqs) {
+                renderer.AddInequalityProp("Inequality", ineq);
+            }
+        }
         renderer.Render(world, varDict);
         //renderer.transform.localScale = alignHorizontal ? new Vector3(1, node.width, 1) : new Vector3(node.width, 1, 1);
 
@@ -47,7 +57,7 @@ public class PlanUIManager : MonoBehaviour
                 UILine line = Instantiate(linePrefab, transform);
                 line.Connect(position + new Vector3(nodeWidth/2, -nodeHeight, 0), childPos + new Vector3(nodeWidth/2, 0, 0));
             }
-            RenderTreeRecursive(child, childPos, world, varDict);
+            RenderTreeRecursive(child, childPos, world, varDict, ineqs, costs);
             offset += child.width;
         }
     }

@@ -22,6 +22,7 @@ public abstract class SimpleItemAction : Action
         Entity actor = world.GetEntity(actorID);
         actor.AddItem(itemID, amount);
     }
+
     public override ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time)
     {
         int pastItemsGained = progress == null ? 0 : ((CounterProgress)progress).count;

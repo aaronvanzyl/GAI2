@@ -33,7 +33,7 @@ public class OwnMoneyCondition : Condition
                     }
                 }
             }
-            return actions.Shuffle().Take(maxActions).ToList();
+            return actions.Take(maxActions).ToList();
         }
         return new List<Action>();
     }

@@ -14,7 +14,13 @@ public class PropertyGroupRenderer : MonoBehaviour
     public EntityIDRenderer entityIDRendererPrefab;
     public ItemIDRenderer itemIDRendererPrefab;
     public ExpressionRenderer expressionRendererPrefab;
+    public InequalityRenderer ineqRendererPrefab;
+    public StringRenderer strRendererPrefab;
     List<PropertyRenderer> propRenderers = new List<PropertyRenderer>();
+
+    public void SetHeaderText(string text) {
+        header.text = text;
+    }
 
     public void AddEntityIDProp(string propName, int entityID) {
         EntityIDRenderer prop = Instantiate(entityIDRendererPrefab, propertyGroup);
@@ -37,6 +43,19 @@ public class PropertyGroupRenderer : MonoBehaviour
         propRenderers.Add(prop);
         prop.propName = propName;
         prop.expression = expression;
+    }
+
+    public void AddInequalityProp(string propName, Inequality ineq) {
+        InequalityRenderer prop = Instantiate(ineqRendererPrefab, propertyGroup);
+        propRenderers.Add(prop);
+        prop.propName = propName;
+        prop.inequality = ineq;
+    }
+
+    public void AddStringProp(string propName, string str) {
+        StringRenderer prop = Instantiate(strRendererPrefab, propertyGroup);
+        propRenderers.Add(prop);
+        prop.str = str;
     }
 
     public void Render(IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict)

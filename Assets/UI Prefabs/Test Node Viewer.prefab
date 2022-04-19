@@ -209,10 +209,11 @@ MonoBehaviour:
   header: {fileID: 1257220729870516469}
   canvas: {fileID: 1257220729391035549}
   propertyGroup: {fileID: 1766135931}
-  manager: {fileID: 0}
   entityIDRendererPrefab: {fileID: 2528180175200715365, guid: ce4dfc981d4d4984c813d7f30c1f4329, type: 3}
   itemIDRendererPrefab: {fileID: 1694680932975820923, guid: 05e5aed0db9c0714a94e2d122c0d28fc, type: 3}
   expressionRendererPrefab: {fileID: 3351589263585124742, guid: 9e0fe03d9514da341b2b024783f867d1, type: 3}
+  ineqRendererPrefab: {fileID: 889884238384864294, guid: a3c03bbd26b932b4a959f15c83d616f0, type: 3}
+  strRendererPrefab: {fileID: 3198486366710451355, guid: 144349c2d1e80034ca311dde764ea2a7, type: 3}
 --- !u!1 &1257220729870516475
 GameObject:
   m_ObjectHideFlags: 0
