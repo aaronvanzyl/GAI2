@@ -35,7 +35,7 @@ public class BuyAction : Action
         ExecuteHelper(world, amount);
     }
 
-    public override ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time)
+    public override ActionProgress ExecuteSolved(World world, IReadOnlyDictionary<int, int> variables, ActionProgress progress, float time)
     {
         ExecuteHelper(world, amount.EvaluateToExpression(variables));
         return new ActionProgress(true, time);
@@ -78,7 +78,7 @@ public class BuyAction : Action
         renderer.AddExpressionProp("Amount", amount);
     }
 
-    public override float CalculateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float CalculateCost(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables)
     {
         IReadOnlyEntity actor = world.GetReadOnlyEntity(actorID);
         IReadOnlyEntity merchant = world.GetReadOnlyEntity(merchantID);
@@ -92,7 +92,7 @@ public class BuyAction : Action
         return cost;
     }
 
-    public override float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float EstimateTime(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables)
     {
         return 0;
     }

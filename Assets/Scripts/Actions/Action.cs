@@ -10,9 +10,9 @@ public abstract class Action: Node
     public List<Condition> conditions;
 
     public abstract void Execute(World world);
-    public abstract ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time);
-    public abstract float CalculateCost(IReadOnlyWorld world, Dictionary<int, int> variables);
-    public abstract float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables);
+    public abstract ActionProgress ExecuteSolved(World world, IReadOnlyDictionary<int, int> variables, ActionProgress progress, float time);
+    public abstract float CalculateCost(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables);
+    public abstract float EstimateTime(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables);
     public abstract List<Condition> GenerateConditions(IReadOnlyWorld world);
     public abstract Action Clone();
 

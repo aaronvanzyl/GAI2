@@ -38,7 +38,7 @@ public class OwnMoneyCondition : Condition
         return new List<Action>();
     }
 
-    public override bool SatisfiedSolved(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override bool SatisfiedSolved(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables)
     {
         IReadOnlyEntity owner = world.GetReadOnlyEntity(ownerID);
         return owner.readOnlyMoney.constant >= amount.Evaluate(variables);

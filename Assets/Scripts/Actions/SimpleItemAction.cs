@@ -23,7 +23,7 @@ public abstract class SimpleItemAction : Action
         actor.AddItem(itemID, amount);
     }
 
-    public override ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time)
+    public override ActionProgress ExecuteSolved(World world, IReadOnlyDictionary<int, int> variables, ActionProgress progress, float time)
     {
         int pastItemsGained = progress == null ? 0 : ((CounterProgress)progress).count;
         int itemsNeeded = amount.Evaluate(variables) - pastItemsGained;

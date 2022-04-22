@@ -78,30 +78,18 @@ public class Test : MonoBehaviour
 
         OwnItemCondition ownItemCond = new OwnItemCondition(actor.ID, fishID, new Expression(3));
 
+        PlanSet planSet = PlanGenerator.GeneratePlanSet(world, actor.ID, ownItemCond, 5, 3);
+        planUIManager.RenderTree(planSet.validPlans[0].root, world, planSet.validPlans[0].varDict, planSet.validPlans[0].ineqs);
+        //PlanGenerator.GenerateTree(world, actor.ID, ownItemCond, 5, 3);
+        //List<PathNode> solutionTrees = PlanGenerator.GeneratePathTrees(ownItemCond);
+        //List<int> solvedSolutionTrees = new List<int>(); 
+        //List<IReadOnlyDictionary<int, int>> varDicts = new List<IReadOnlyDictionary<int, int>>(); 
+        //List<IReadOnlyDictionary<int, IEnumerable<Inequality>>> solutionTreeIneqs = new List<IReadOnlyDictionary<int, IEnumerable<Inequality>>>();
+        //for(int i = 0; i < solutionTrees.Count; i++)
+        //{
+        //    PathNode n = solutionTrees[i];
 
-        PlanGenerator.GenerateTree(world, actor.ID, ownItemCond, 5, 3);
-        List<PathNode> solutionTrees = PlanGenerator.GeneratePathTrees(ownItemCond);
-        List<int> solvedSolutionTrees = new List<int>(); 
-        List<IReadOnlyDictionary<int, int>> varDicts = new List<IReadOnlyDictionary<int, int>>(); 
-        List<IReadOnlyDictionary<int, IEnumerable<Inequality>>> solutionTreeIneqs = new List<IReadOnlyDictionary<int, IEnumerable<Inequality>>>();
-        for(int i = 0; i < solutionTrees.Count; i++)
-        {
-            PathNode n = solutionTrees[i];
-            IReadOnlyDictionary<int, IEnumerable<Inequality>> inequalities = PlanGenerator.GenerateInequalities(world, n);
-            List<Inequality> allInequalities = new List<Inequality>();
-            foreach (IEnumerable<Inequality> ls in inequalities.Values) {
-                allInequalities.AddRange(ls);
-            }
-            solutionTreeIneqs.Add(inequalities);
-            if (IneqSolver.Solve(allInequalities, out Dictionary<int, int> varDict))
-            {
-                varDicts.Add(varDict);
-                solvedSolutionTrees.Add(i);
-            }
-            else {
-                varDicts.Add(null);
-            }
-        }
+        //}
         //print($"found {solutionTrees.Count} solutions");
         //foreach (PathNode node in solutionTrees)
         //{
@@ -117,23 +105,23 @@ public class Test : MonoBehaviour
         //}
 
 
-        print($"found {solvedSolutionTrees.Count}/{solutionTrees.Count} valid solutions");
-        //foreach (Inequality ineq in inequalities)
-        //{
-        //    print(ineq);
-        //}
+        //print($"found {solvedSolutionTrees.Count}/{solutionTrees.Count} valid solutions");
+        ////foreach (Inequality ineq in inequalities)
+        ////{
+        ////    print(ineq);
+        ////}
 
-        //planUIManager.RenderTree(ownItemCond, world, new Dictionary<int, int>());
-        int selectedTree = 1;
-        //foreach (Node n in PlanGenerator.DFS(solutionTrees[selectedTree])) {
-        //    if (solutionTreeIneqs[selectedTree].TryGetValue(n.ID, out IEnumerable<Inequality> ineqs) && ineqs.Any()) {
-        //        Debug.Log(n.ID);
-        //        foreach (Inequality ineq in ineqs) {
-        //            Debug.Log(ineq);
-        //        }
-        //    }
-        //}
-        planUIManager.RenderTree(solutionTrees[selectedTree], world, varDicts[selectedTree], solutionTreeIneqs[selectedTree]);
+        ////planUIManager.RenderTree(ownItemCond, world, new Dictionary<int, int>());
+        //int selectedTree = 1;
+        ////foreach (Node n in PlanGenerator.DFS(solutionTrees[selectedTree])) {
+        ////    if (solutionTreeIneqs[selectedTree].TryGetValue(n.ID, out IEnumerable<Inequality> ineqs) && ineqs.Any()) {
+        ////        Debug.Log(n.ID);
+        ////        foreach (Inequality ineq in ineqs) {
+        ////            Debug.Log(ineq);
+        ////        }
+        ////    }
+        ////}
+        //planUIManager.RenderTree(solutionTrees[selectedTree], world, varDicts[selectedTree], solutionTreeIneqs[selectedTree]);
     }
 
 }

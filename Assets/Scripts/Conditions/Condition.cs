@@ -9,7 +9,7 @@ public abstract class Condition: Node
 
     public abstract List<Action> GenerateActions(IReadOnlyWorld world, int actorID, int maxActions);
 
-    public abstract bool SatisfiedSolved(IReadOnlyWorld world, Dictionary<int, int> variables);
+    public abstract bool SatisfiedSolved(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables);
 
     public override IEnumerable<Node> GetChildren()
     {

@@ -7,6 +7,38 @@ public static class PlanGenerator
 {
     static readonly float maxTimePerAction = 1000;
 
+    public static PlanSet GeneratePlanSet(IReadOnlyWorld underlying, int actorID, Condition condition, int maxBranch, int maxDepth) {
+        ExpandTree(underlying, actorID, condition, maxBranch, maxDepth);
+        List<PathNode> planRootNodes = GeneratePathTrees(condition);
+        PlanSet planSet = new PlanSet(underlying, condition, actorID);
+        foreach (PathNode planRoot in planRootNodes) {
+            bool valid = false;
+            IReadOnlyDictionary<int, int> varDict = null;
+            IReadOnlyDictionary<int, float> costs = null;
+            float totalCost = float.NaN;
+            IReadOnlyDictionary<int, IEnumerable<Inequality>> inequalities = GenerateInequalities(underlying, planRoot);
+            List<Inequality> allInequalities = new List<Inequality>();
+            foreach (IEnumerable<Inequality> ls in inequalities.Values)
+            {
+                allInequalities.AddRange(ls);
+            }
+           
+            if (IneqSolver.Solve(allInequalities, out Dictionary<int, int> solvedVars))
+            {
+                valid = true;
+                varDict = solvedVars;
+                costs = CalculateCosts(underlying, planRoot, varDict);
+                totalCost = costs.Values.Sum();
+            }
+            Plan plan = new Plan(planRoot, valid, DFS(planRoot), varDict, inequalities, costs, totalCost);
+            planSet.plans.Add(plan);
+            if (plan.valid) {
+                planSet.validPlans.Add(plan);
+            }
+        }
+        return planSet;
+    }
+
     /// <summary>
     /// Expands condition/action tree in-place
     /// </summary>
@@ -14,7 +46,7 @@ public static class PlanGenerator
     /// <param name="maxBranch">Max number of actions per condition</param>
     /// <param name="maxDepth">Max depth of tree (in actions)</param>
     /// 
-    public static void GenerateTree(World world, int actorID, Condition condition, int maxBranch, int maxDepth)
+    static void ExpandTree(IReadOnlyWorld world, int actorID, Condition condition, int maxBranch, int maxDepth)
     {
         if (maxDepth == 0)
         {
@@ -26,7 +58,7 @@ public static class PlanGenerator
             action.conditions = action.GenerateConditions(world);
             foreach (Condition cond in action.conditions)
             {
-                GenerateTree(world, actorID, cond, maxBranch, maxDepth - 1);
+                ExpandTree(world, actorID, cond, maxBranch, maxDepth - 1);
             }
         }
         int nextID = 0;
@@ -37,7 +69,7 @@ public static class PlanGenerator
     }
 
     // Returns a new list of paths, where every path has a final world state ending with the (probably satisfied) given condition
-    public static List<PathNode> GeneratePathTrees(Condition condition)
+    static List<PathNode> GeneratePathTrees(Condition condition)
     {
         List<PathNode> paths = Paths(condition);
         int nextID = 0;
@@ -117,7 +149,7 @@ public static class PlanGenerator
         return visitOrder;
     }
 
-    public static IReadOnlyDictionary<int, IEnumerable<Inequality>> GenerateInequalities(IReadOnlyWorld underlying, PathNode root)
+    static IReadOnlyDictionary<int, IEnumerable<Inequality>> GenerateInequalities(IReadOnlyWorld underlying, PathNode root)
     {
         World simulated = new World(underlying);
         List<Node> dfs = DFS(root);
@@ -149,7 +181,7 @@ public static class PlanGenerator
         return inequalities;
     }
 
-    public static IReadOnlyDictionary<int, float> CalculateCosts(IReadOnlyWorld underlying, PathNode root, Dictionary<int, int> varDict) 
+    static IReadOnlyDictionary<int, float> CalculateCosts(IReadOnlyWorld underlying, PathNode root, IReadOnlyDictionary<int, int> varDict) 
     {
         World simulated = new World(underlying);
         List<Node> dfs = DFS(root);

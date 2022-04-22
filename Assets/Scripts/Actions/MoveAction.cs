@@ -22,7 +22,7 @@ public class MoveAction : Action
         world.GetEntity(actorID).pos = world.GetReadOnlyEntity(targetID).pos;
     }
 
-    public override ActionProgress ExecuteSolved(World world, Dictionary<int, int> variables, ActionProgress progress, float time)
+    public override ActionProgress ExecuteSolved(World world, IReadOnlyDictionary<int, int> variables, ActionProgress progress, float time)
     {
         // TODO: implement movement
         Execute(world);
@@ -47,12 +47,12 @@ public class MoveAction : Action
         renderer.AddEntityIDProp("Target", targetID);
     }
 
-    public override float CalculateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float CalculateCost(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables)
     {
         return 0;
     }
 
-    public override float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float EstimateTime(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables)
     {
         throw new System.NotImplementedException();
     }

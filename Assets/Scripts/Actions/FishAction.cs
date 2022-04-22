@@ -14,12 +14,12 @@ public class FishAction : SimpleItemAction
         return new FishAction(actorID, giverID, itemID, timePerItem);
     }
 
-    public override float EstimateTime(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float EstimateTime(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables)
     {
         return amount.Evaluate(variables) * timePerItem;
     }
 
-    public override float CalculateCost(IReadOnlyWorld world, Dictionary<int, int> variables)
+    public override float CalculateCost(IReadOnlyWorld world, IReadOnlyDictionary<int, int> variables)
     {
         IReadOnlyEntity actor = world.GetReadOnlyEntity(actorID);
         int resolvedAmount = amount.Evaluate(variables);
