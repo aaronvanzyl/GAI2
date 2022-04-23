@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class PlanGenerator
 {
-    static readonly float maxTimePerAction = 1000;
+    static readonly float maxTimePerAction = 10000;
 
     public static PlanSet GeneratePlanSet(IReadOnlyWorld underlying, int actorID, Condition condition, int maxBranch, int maxDepth) {
         ExpandTree(underlying, actorID, condition, maxBranch, maxDepth);
@@ -90,19 +90,19 @@ public static class PlanGenerator
             return new List<PathNode>() { new PathNode(condition) };
         }
         List<PathNode> condPaths = new List<PathNode>();
-        Debug.Log($"Evaluating {condition.actions.Count} actions to solve {condition.GetName()}");
+        //Debug.Log($"Evaluating {condition.actions.Count} actions to solve {condition.GetName()}");
         foreach (Action action in condition.actions)
         {
-            Debug.Log($"Evaluating {action.GetName()} to solve {condition.GetName()}");
+            //Debug.Log($"Evaluating {action.GetName()} to solve {condition.GetName()}");
             List<PathNode> actionPaths = Paths(action);
-            Debug.Log($"Evaluating {actionPaths.Count} paths to solve {action.GetName()}");
+            //Debug.Log($"Evaluating {actionPaths.Count} paths to solve {action.GetName()}");
             foreach (PathNode actionPath in actionPaths)
             {
                 PathNode condPath = new PathNode(condition);
                 condPath.children = new List<PathNode> { actionPath };
                 condPaths.Add(condPath);
             }
-            Debug.Log($"Total paths for {condition.GetName()}: {condPaths.Count}");
+            //Debug.Log($"Total paths for {condition.GetName()}: {condPaths.Count}");
         }
         return condPaths;
     }
@@ -159,7 +159,7 @@ public static class PlanGenerator
         {
             PathNode pathNode = (PathNode)node;
             Node linked = pathNode.linked;
-            Debug.Log(linked.ToString());
+            //Debug.Log(linked.ToString());
             if (linked is Condition linkedCond)
             {
                 List<Inequality> nodeIneqs = linkedCond.GenerateInequalities(simulated);

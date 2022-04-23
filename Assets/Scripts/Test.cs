@@ -78,8 +78,9 @@ public class Test : MonoBehaviour
 
         OwnItemCondition ownItemCond = new OwnItemCondition(actor.ID, fishID, new Expression(3));
 
-        PlanSet planSet = PlanGenerator.GeneratePlanSet(world, actor.ID, ownItemCond, 5, 3);
-        planUIManager.RenderTree(planSet.validPlans[0].root, world, planSet.validPlans[0].varDict, planSet.validPlans[0].ineqs);
+        PlanSet planSet = PlanGenerator.GeneratePlanSet(world, actor.ID, ownItemCond, 8, 20);
+        planUIManager.SetPlanSet(planSet);
+        //planUIManager.RenderTree(planSet.validPlans[0].root, world, planSet.validPlans[0].varDict, planSet.validPlans[0].ineqs);
         //PlanGenerator.GenerateTree(world, actor.ID, ownItemCond, 5, 3);
         //List<PathNode> solutionTrees = PlanGenerator.GeneratePathTrees(ownItemCond);
         //List<int> solvedSolutionTrees = new List<int>(); 

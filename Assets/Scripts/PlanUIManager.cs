@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlanUIManager : MonoBehaviour
 {
     public PropertyGroupRenderer nodeRendererPrefab;
     public UILine linePrefab;
+
+    public Text title;
+    public Text totalCost;
+    public Text totalNodes;
+    public Slider planNumSlider;
+
     public bool alignHorizontal = true;
     public float nodeSpacingX = 1;
     public float nodeSpacingY = 1;
@@ -14,7 +21,60 @@ public class PlanUIManager : MonoBehaviour
     public bool center = false;
     public bool drawLines = true;
 
-    public void RenderTree(Node rootNode, IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict = null, IReadOnlyDictionary<int, IEnumerable<Inequality>> ineqs = null, IReadOnlyDictionary<int, float> costs = null)
+    public bool showingFullTree = false;
+    public int selectedPlan = 0;
+    PlanSet planSet;
+
+    public void SetPlanSet(PlanSet set) {
+        planSet = set;
+        selectedPlan = 0;
+        showingFullTree = true;
+        planNumSlider.value = 0;
+        planNumSlider.maxValue = set.plans.Count - 1;
+        UpdateUI();
+    }
+
+    public void SetSelectedPlan(float newPlan) {
+        selectedPlan = (int)newPlan;
+        UpdateUI();
+    }
+
+    public void SetShowFullTree(bool showFullTree) {
+        showingFullTree = showFullTree;
+        UpdateUI();
+    }
+
+    public void ToggleShowFullTree()
+    {
+        showingFullTree = !showingFullTree;
+        UpdateUI();
+    }
+
+    void UpdateUI() {
+        Clear();
+        if (showingFullTree)
+        {
+            title.text = "Full Tree";
+            totalCost.text = $"Valid Plans: {planSet.validPlans.Count}/{planSet.plans.Count}";
+            totalNodes.text = "Nodes: " + PlanGenerator.DFS(planSet.cond).Count;
+            RenderTree(planSet.cond, planSet.underlying, null, null, null);
+        }
+        else {
+            Plan plan = planSet.plans[selectedPlan];
+            title.text = $"Plan #{selectedPlan+1}/{planSet.plans.Count}";
+            if (plan.valid)
+            {
+                totalCost.text = "Cost: " + plan.totalCost;
+            }
+            else {
+                totalCost.text = "Could not solve";
+            }
+            totalNodes.text = "Nodes: " + plan.traverseOrder.Count;
+            RenderTree(plan.root, planSet.underlying, plan.varDict, plan.ineqs, plan.costs);
+        }
+    }
+
+    void RenderTree(Node rootNode, IReadOnlyWorld world, IReadOnlyDictionary<int, int> varDict = null, IReadOnlyDictionary<int, IEnumerable<Inequality>> ineqs = null, IReadOnlyDictionary<int, float> costs = null)
     {
         rootNode.CalculateWidthRecursive();
         RenderTreeRecursive(rootNode, Vector3.zero, world, varDict, ineqs, costs);
@@ -64,6 +124,9 @@ public class PlanUIManager : MonoBehaviour
 
     public void Clear()
     {
-
+        for (int i = 0; i < transform.childCount; i++) {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+        
     }
 }
