@@ -45,9 +45,14 @@ public class Test : MonoBehaviour
         {
             name = "Fish",
             value = 2,
-            attributes = new Dictionary<ItemAttribute, float> { [ItemAttribute.SalePreference] = 1 }
+            attributes = new Dictionary<ItemAttribute, float> { [ItemAttribute.SalePreference] = 1f }
         };
         int fishID = world.RegisterItem(fish);
+
+        //Debug.Log(fish.attributes.Keys.Count);
+        //Debug.Log(fish.attributes.Keys.First());
+        //Debug.Log(world.ItemsWithAttribute(ItemAttribute.SalePreference, 0).Count);
+
 
         LivingEntity actor = new LivingEntity()
         {

@@ -90,14 +90,16 @@ public class World : IReadOnlyWorld
     {
         maxItemID++;
         itemDict.Add(maxItemID, item);
-        foreach (ItemAttribute attr in item.readOnlyAttributes.Values)
+        foreach (ItemAttribute attr in item.readOnlyAttributes.Keys)
         {
+            Debug.Log($"Register attr {attr}");
             if (itemsWithAttrDict.TryGetValue(attr, out List<int> taggedItems))
             {
                 taggedItems.Add(maxItemID);
             }
             else
             {
+                Debug.Log($"Registered new attr {attr}");
                 itemsWithAttrDict[attr] = new List<int> { maxItemID };
             }
 

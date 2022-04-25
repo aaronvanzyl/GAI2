@@ -23,6 +23,7 @@ public class OwnMoneyCondition : Condition
             possibleSaleItems.AddRange(actor.ItemsInInventory());
             possibleSaleItems.AddRange(world.ItemsWithAttribute(ItemAttribute.SalePreference, 0));
 
+
             IEnumerable<IReadOnlyEntity> inRange = world.ReadOnlyEntitiesByDistance(actor.pos, actor.aiConfig.maxEntitySearchDist);
             foreach (IReadOnlyEntity merchant in inRange) {
                 if (merchant.canSellTo) {
