@@ -2,4 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemTag { saleItem }
+public enum ItemAttribute
+{
+    MoveMult, FishingMult, SalePreference
+}

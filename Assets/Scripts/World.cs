@@ -8,7 +8,7 @@ public class World : IReadOnlyWorld
     IReadOnlyWorld underlying;
     Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
     Dictionary<int, IReadOnlyItem> itemDict = new Dictionary<int, IReadOnlyItem>();
-    Dictionary<ItemTag, List<int>> itemsWithTagDict = new Dictionary<ItemTag, List<int>>();
+    Dictionary<ItemAttribute, List<int>> itemsWithAttrDict = new Dictionary<ItemAttribute, List<int>>();
 
     public int maxItemID { get; private set; }
     public int maxEntityID { get; private set; }
@@ -90,26 +90,32 @@ public class World : IReadOnlyWorld
     {
         maxItemID++;
         itemDict.Add(maxItemID, item);
-        foreach (ItemTag tag in item.readOnlyTags)
+        foreach (ItemAttribute attr in item.readOnlyAttributes.Values)
         {
-            if (itemsWithTagDict.TryGetValue(tag, out List<int> taggedItems))
+            if (itemsWithAttrDict.TryGetValue(attr, out List<int> taggedItems))
             {
                 taggedItems.Add(maxItemID);
             }
             else
             {
-                itemsWithTagDict[tag] = new List<int> { maxItemID };
+                itemsWithAttrDict[attr] = new List<int> { maxItemID };
             }
 
         }
         return maxItemID;
     }
 
-    public IReadOnlyList<int> ItemsWithTag(ItemTag tag)
+    public IReadOnlyList<int> ItemsWithAttribute(ItemAttribute attr, float minValue)
     {
-        if (itemsWithTagDict.TryGetValue(tag, out List<int> items))
+        if (itemsWithAttrDict.TryGetValue(attr, out List<int> items))
         {
-            return items;
+            List<int> withMinValue = new List<int>();
+            foreach (int itemID in items) {
+                if (itemDict[itemID].readOnlyAttributes[attr] >= minValue) {
+                    withMinValue.Add(itemID);
+                }
+            }
+            return withMinValue;
         }
         return new List<int>();
     }

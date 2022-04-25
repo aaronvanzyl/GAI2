@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Item : IReadOnlyItem
 {
-
     public string name { get; set; }
     public int value { get; set; }
-    public List<ItemTag> tags = new List<ItemTag>();
-    public IReadOnlyList<ItemTag> readOnlyTags => tags;
+    public Dictionary<ItemAttribute, float> attributes;
+    public IReadOnlyDictionary<ItemAttribute, float> readOnlyAttributes { get => attributes; }
 
 
     public Item Clone()
@@ -17,7 +16,7 @@ public class Item : IReadOnlyItem
         {
             name = name,
             value = value,
-            tags = new List<ItemTag>(tags)
+            attributes = new Dictionary<ItemAttribute, float>(attributes)
         };
     }
 

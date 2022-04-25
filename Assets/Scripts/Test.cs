@@ -45,7 +45,7 @@ public class Test : MonoBehaviour
         {
             name = "Fish",
             value = 2,
-            tags = new List<ItemTag>() { ItemTag.saleItem }
+            attributes = new Dictionary<ItemAttribute, float> { [ItemAttribute.SalePreference] = 1 }
         };
         int fishID = world.RegisterItem(fish);
 

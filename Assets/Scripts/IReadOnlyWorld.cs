@@ -12,5 +12,5 @@ public interface IReadOnlyWorld
     public IOrderedEnumerable<IReadOnlyEntity> ReadOnlyEntitiesByDistance(Vector2Int pos, float maxDist);
     public IEnumerable<int> AllEntityIDs();
     public IReadOnlyItem GetItem(int itemID);
-    public IReadOnlyList<int> ItemsWithTag(ItemTag tag); 
+    public IReadOnlyList<int> ItemsWithAttribute(ItemAttribute attribute, float minValue); 
 }

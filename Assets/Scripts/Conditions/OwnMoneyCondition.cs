@@ -21,9 +21,9 @@ public class OwnMoneyCondition : Condition
             IReadOnlyEntity actor = world.GetReadOnlyEntity(actorID);
             List<int> possibleSaleItems = new List<int>();
             possibleSaleItems.AddRange(actor.ItemsInInventory());
-            possibleSaleItems.AddRange(world.ItemsWithTag(ItemTag.saleItem));
+            possibleSaleItems.AddRange(world.ItemsWithAttribute(ItemAttribute.SalePreference, 0));
 
-            IEnumerable<IReadOnlyEntity> inRange = world.ReadOnlyEntitiesByDistance(actor.pos,actor.aiConfig.maxEntitySearchDist);
+            IEnumerable<IReadOnlyEntity> inRange = world.ReadOnlyEntitiesByDistance(actor.pos, actor.aiConfig.maxEntitySearchDist);
             foreach (IReadOnlyEntity merchant in inRange) {
                 if (merchant.canSellTo) {
                     foreach (int itemID in possibleSaleItems) {

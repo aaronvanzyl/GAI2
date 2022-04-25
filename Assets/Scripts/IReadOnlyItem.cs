@@ -6,6 +6,6 @@ public interface IReadOnlyItem
 {
     public string name { get; }
     public int value { get; }
-    public IReadOnlyList<ItemTag> readOnlyTags { get; }
+    public IReadOnlyDictionary<ItemAttribute, float> readOnlyAttributes { get; }
     public Item Clone();
 }
